@@ -7,6 +7,7 @@
         "analyse": "em-scripts analyse"
     },
     "dependencies": {
+        "d3-dispatch": "^1.0.6",
         "d3-drag": "^1.2.5",
         "d3-force": "^2.0.1",
         "d3-selection": "^1.4.1",
