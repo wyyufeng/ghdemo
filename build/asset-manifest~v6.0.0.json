@@ -1,0 +1,14 @@
+{
+  "files": {
+    "index.js": "./js/index.7f7f729b.chunk.js",
+    "runtime-index.js": "./js/runtime-index.446f23b7.js",
+    "js/2.8a81ed5b.chunk.js": "./js/2.8a81ed5b.chunk.js",
+    "index.html": "./index.html",
+    "js/2.8a81ed5b.chunk.js.LICENSE": "./js/2.8a81ed5b.chunk.js.LICENSE"
+  },
+  "sourceMaps": {
+    "index.js.map": "./js/index.7f7f729b.chunk.js.map",
+    "runtime-index.js.map": "./js/runtime-index.446f23b7.js.map",
+    "js/2.8a81ed5b.chunk.js.map": "./js/2.8a81ed5b.chunk.js.map"
+  }
+}

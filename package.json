@@ -1,0 +1,20 @@
+{
+    "name": "ghdemo",
+    "version": "0.0.0",
+    "scripts": {
+        "start": "em-scripts serve",
+        "build": "em-scripts build",
+        "analyse": "em-scripts analyse"
+    },
+    "dependencies": {
+        "d3-drag": "^1.2.5",
+        "d3-force": "^2.0.1",
+        "d3-selection": "^1.4.1",
+        "em-scripts": "^1.1.6",
+        "em-template": "^1.1.5",
+        "eslint-config-alloy": "^3.6.0",
+        "pixi.js": "^5.2.1",
+        "stats.js": "^0.17.0",
+        "three": "^0.113.2"
+    }
+}

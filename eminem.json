@@ -1,0 +1,11 @@
+{
+    "name": "ghdemo",
+    "version": "6.0.0",
+    "app": [
+        {
+            "name": "index",
+            "entry": "index.js",
+            "html": "index.html"
+        }
+    ]
+}
