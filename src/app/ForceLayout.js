@@ -36,7 +36,7 @@ class ForceLayout {
         const dispatcher = this.dispatcher;
         this.applyForce('CoulombsLaw', this.applyCoulombsLaw);
         this.applyForce('HooksLaw', this.applyHooksLaw);
-        this.applyForce('BorderCollision', this.applyBorderCollision.bind(this));
+        // this.applyForce('BorderCollision', this.applyBorderCollision.bind(this));
         window.requestAnimationFrame(
             (_step = function() {
                 self.update();
@@ -69,7 +69,7 @@ class ForceLayout {
                 node.p.x = node.fx;
             }
             if (typeof node.fy !== 'undefined') {
-                node.position.y = node.fy;
+                node.p.y = node.fy;
             }
             node.a.x = node.a.y = 0;
         });
@@ -170,9 +170,11 @@ class ForceLayout {
     /**
      * 由库伦公式计算斥力 f= k* q1*q2/r^2*e;
      * @link https://baike.baidu.com/item/%E5%BA%93%E4%BB%91%E5%AE%9A%E5%BE%8B
+     *
      */
     applyCoulombsLaw(nodes) {
         const l = nodes.length;
+        // TODO: 这里的时间复杂度为 o(n^2),可以用四叉搜索树优化
         for (let i = 0; i < l; i++) {
             for (let j = i + 1; j < l; j++) {
                 if (i === j) continue;
@@ -183,7 +185,7 @@ class ForceLayout {
                 const v = sub(ni.p, nj.p, vector());
                 const distance = magnitude(v);
                 const dir = normalize(v);
-                const f1 = multiplyScalar(multiplyScalar(dir, 400), 1 / distance ** 2);
+                const f1 = multiplyScalar(multiplyScalar(dir, 1000), 1 / distance ** 2);
                 const f2 = multiplyScalar(clone(f1), -1);
                 add(ni.a, f1);
                 add(nj.a, f2);
@@ -200,7 +202,7 @@ class ForceLayout {
             const v = sub(source.p, target.p, vector());
             const dir = normalize(v);
             const interpolation = length - magnitude(v);
-            const f1 = multiplyScalar(dir, interpolation * 0.01);
+            const f1 = multiplyScalar(dir, interpolation * 0.05);
             const f2 = multiplyScalar(clone(f1), -1);
             add(source.a, f1);
             add(target.a, f2);
@@ -220,6 +222,7 @@ class ForceLayout {
                 node.p.y <= 100
             ) {
                 // 这里可以优化到更好的动效 比如随机朝某个方向运动
+                // FIXME: 这里会导致其他的力失效
                 node.v.x = 0;
                 node.v.y = 0;
                 node.a.x = 0;

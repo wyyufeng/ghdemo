@@ -1,7 +1,10 @@
+/* eslint-disable no-unused-vars */
 import * as PIXI from 'pixi.js';
 import ForceLayout from './ForceLayout';
 import data from '../assets/graph.json';
-
+import NodeShape from './shapes/NodeShape';
+import LinkShape from './shapes/LinkShape';
+console.log(new PIXI.PlaneGeometry());
 const width = window.innerWidth;
 const height = window.innerHeight;
 const container = document.body;
@@ -16,8 +19,8 @@ const app = new PIXI.Application({
     backgroundColor: 0x00173d
 });
 container.appendChild(app.view);
-const linkGh = new PIXI.Graphics();
-app.stage.addChild(linkGh);
+
+app.stage.addChild(LinkShape.GH);
 const layout = new ForceLayout({
     x: 0,
     y: 0,
@@ -39,17 +42,16 @@ layout.on('tick', function() {
     layout.eachNodes(function(node) {
         node.ctx.position.set(node.p.x, node.p.y);
     });
-    linkGh.clear();
+    LinkShape.clear();
     layout.eachLinks(function(link) {
         const { target, source } = link;
-        linkGh.lineStyle(2, 0xffffff);
-        linkGh.moveTo(source.p.x, source.p.y);
-        linkGh.lineTo(target.p.x, target.p.y);
+        // linkGh.lineStyle(2, 0xffffff);
+        LinkShape.source(source.p.x, source.p.y);
+        LinkShape.target(target.p.x, target.p.y);
     });
 });
 function renderNode(node) {
     const c = new PIXI.Container();
-    const gh = new PIXI.Graphics();
     const basicText = new PIXI.Text(
         node.id,
         new PIXI.TextStyle({
@@ -58,19 +60,43 @@ function renderNode(node) {
     );
 
     c.addChild(basicText);
-    gh.beginFill(0xff0000);
-    gh.arc(0, 0, 20, 0, Math.PI * 2);
-    gh.endFill();
+    const nodeGh = new NodeShape(25);
     c.position.set(node.p.x, node.p.y);
-    c.addChild(gh);
+    c.addChild(nodeGh);
     node.ctx = c;
     c.node = node;
     app.stage.addChild(c);
+    c.interactive = true;
+    c.on('pointerdown', onNodeDragStart)
+        .on('pointerup', onNodeDragEnd)
+        .on('pointerupoutside', onNodeDragEnd)
+        .on('pointermove', onNodeDragMove);
 }
 
 function renderLink(link) {
     const { source, target } = link;
-    linkGh.lineStyle(2, 0xffffff);
-    linkGh.moveTo(source.p.x, source.p.y);
-    linkGh.lineTo(target.p.x, target.p.y);
+    // linkGh.lineStyle(2, 0xffffff);
+    LinkShape.source(source.p.x, source.p.y);
+    LinkShape.target(target.p.x, target.p.y);
+}
+
+function onNodeDragStart(event) {
+    this.e_data = event.data;
+    this.pressing = true;
+}
+function onNodeDragMove(event) {
+    if (this.pressing) this.dragging = true;
+    if (this.dragging) {
+        const newPosition = this.e_data.getLocalPosition(this.parent);
+        this.node.fx = newPosition.x;
+        this.node.fy = newPosition.y;
+    }
+}
+
+function onNodeDragEnd() {
+    this.pressing = false;
+    this.dragging = false;
+    this.e_data = null;
+    this.node.fx = undefined;
+    this.node.fy = undefined;
 }
