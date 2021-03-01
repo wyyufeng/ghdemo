@@ -16,6 +16,6 @@
         "eslint-config-alloy": "^3.6.0",
         "pixi.js": "^5.2.1",
         "stats.js": "^0.17.0",
-        "three": "^0.113.2"
+        "three": "^0.125.0"
     }
 }
